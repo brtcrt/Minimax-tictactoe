@@ -102,7 +102,6 @@ function AutoPlay(squares) {
   if (won) {
     return;
   }
-  console.log(squares);
   let emptySquares = [];
   for(let i=0; i<squares.length; i++) {
     if (squares[i] === null) {
@@ -110,8 +109,6 @@ function AutoPlay(squares) {
     }
   }
   const randomSquare = Math.floor(Math.random()*emptySquares.length);
-  console.log(randomSquare);
-  console.log(emptySquares);
   squares[emptySquares[randomSquare]] = "O";
   
 }
