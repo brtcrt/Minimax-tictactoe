@@ -44,12 +44,17 @@ class Square extends React.Component {
   
     render() {
       const winner = calculateWinner(this.state.squares);
+      const draw = checkDraw(this.state.squares);
       let status;
       if (winner) {
         status = 'Winner: ' + winner + " Refresh the page to play again.";
+      } else if (draw) {
+        status = "It's a draw. Refresh the page to play again."
       } else {
         status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
       }
+        
+
   
       return (
         <div>
@@ -98,20 +103,98 @@ class Square extends React.Component {
   );
 
 function AutoPlay(squares) {
-  let won = calculateWinner(squares)
+  let won = calculateWinner(squares);
+  let draw = checkDraw(squares);
   if (won) {
     return;
+  } else if (draw) {
+    return;
   }
-  let emptySquares = [];
-  for(let i=0; i<squares.length; i++) {
-    if (squares[i] === null) {
-      emptySquares.push(i);
+  
+  let bestScore = -Infinity;
+  let bestMove;
+  for (let i=0; i<squares.length; i++) {
+    if(squares[i] === null) {
+      squares[i] = "O";
+      let score = minimax(squares, 0, false);
+      squares[i] = null;
+      if (score > bestScore) {
+        bestScore = score;
+        bestMove = i;
+      }
     }
   }
-  const randomSquare = Math.floor(Math.random()*emptySquares.length);
-  squares[emptySquares[randomSquare]] = "O";
+  squares[bestMove] = "O";
+
+  //let emptySquares = [];
+  //for(let i=0; i<squares.length; i++) {
+  //  if (squares[i] === null) {
+  //    emptySquares.push(i);
+  //  }
+  //}
+  //const randomSquare = Math.floor(Math.random()*emptySquares.length);
+  //squares[emptySquares[randomSquare]] = "O";
   
 }
+
+
+
+function minimax (squares, depth, isMaximizing) {
+  let scores = {
+    X: -1,
+    O: 1,
+    draw: 0
+  };
+  let winner = calculateWinner(squares);
+  let result = null;
+  if (checkDraw(squares)) {
+    result = "draw";
+  }
+  if (winner) {
+    result = winner;
+  }
+  if(result !== null) {
+    return scores[result];
+  }
+  if(isMaximizing) {
+    let bestScore = -Infinity;
+    for (let i=0; i<squares.length; i++) {
+      if(squares[i] == null) {
+        squares[i] = "O";
+        let score = minimax(squares, depth+1, false);
+        squares[i] = null;
+        bestScore = Math.max(score, bestScore);
+      }
+    }
+    return bestScore;
+  } else {
+    let bestScore = Infinity;
+    for (let i=0; i<squares.length; i++) {
+      if(squares[i] == null) {
+        squares[i] = "X";
+        let score = minimax(squares, depth+1, true);
+        squares[i] = null;
+        bestScore = Math.min(score, bestScore);
+      }
+    }
+    return bestScore;
+  }
+}
+
+function checkDraw (squares) {
+  let filled = 0;
+  for (let i=0; i<squares.length; i++) {
+    if(squares[i] !== null) {
+      filled++;
+    }
+  }
+  if (filled === 9)  {
+    return true;
+  } else {
+    return false;
+  }
+}
+
 function calculateWinner(squares) {
   const lines = [
     [0, 1, 2],

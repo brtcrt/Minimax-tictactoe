@@ -1,6 +1,6 @@
 {
   "short_name": "TicTac",
-  "name": "Random tictactoe AI",
+  "name": "Minimax tic-tac-toe AI",
   "icons": [
     {
       "src": "amogus1.png",
