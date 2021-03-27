@@ -1,9 +1,9 @@
 # Tic Tac Toe AI with Minimax
 
 ### Some Example Photos:
-1. AI wins:
+1. AI wins: <br>
 ![example1](./public/example1.png)
-2. Draw:
+2. Draw: <br>
 ![example2](./public/example2.png)
 3. You can't win
 
