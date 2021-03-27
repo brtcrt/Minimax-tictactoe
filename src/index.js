@@ -32,10 +32,11 @@ class Square extends React.Component {
       const squares = this.state.squares.slice();
       let won = calculateWinner(squares);
       if (won) return;
-      if(squares[i] === "O") return;
-      squares[i] = "X";
-      this.setState({squares: squares});
+      if(squares[i] === "O" || squares[i] === "X") return;
+      squares[i] = this.state.xIsNext ? "X" : "O";
+      this.setState({squares: squares, xIsNext: false});
       AutoPlay(squares);
+      this.setState({xIsNext: true});
     }
     renderSquare(i) {
       return <Square value={this.state.squares[i]} onClick={()=> {this.handleClick(i)}}/>;
